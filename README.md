@@ -4,16 +4,13 @@ A lightweight, CLI-based utility for downloading music from YouTube Music with e
 
 ## Features
 
-- Search for tracks directly from YouTube Music
+- Search tracks
 - Download audio in MP3 format (192kbps quality)
 - Simple and intuitive CLI interface
 - Fast downloads with yt-dlp backend
-- Customizable download directory
-- Clean ASCII art interface
 
 ## Requirements
 
 - **Python 3.10 or higher**
 - **FFmpeg** (for audio conversion)
-- Internet connection
 
