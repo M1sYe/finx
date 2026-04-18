@@ -1,13 +1,19 @@
-# finx
-A python utility created for downloading music using only the cli interface.
-dependence: ffmpeg, yt_dlp
-python version 3.10 or higher
+# Finx - YouTube Music Downloader
 
-installation guide:
-create virtual environment with:
-python -m venv venv
-and acticate it with scripts in /venv/Scripts/ and choose script by your os
-install dependence:
-pip install yt_dlp
-Manually set the path to ffmpeg in the main.py
-great, you can start using my script
+A lightweight, CLI-based utility for downloading music from YouTube Music with ease. Built with simplicity and efficiency in mind.
+
+## Features
+
+- Search for tracks directly from YouTube Music
+- Download audio in MP3 format (192kbps quality)
+- Simple and intuitive CLI interface
+- Fast downloads with yt-dlp backend
+- Customizable download directory
+- Clean ASCII art interface
+
+## Requirements
+
+- **Python 3.10 or higher**
+- **FFmpeg** (for audio conversion)
+- Internet connection
+
