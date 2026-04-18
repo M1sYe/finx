@@ -1,4 +1,4 @@
-# Finx - YouTube Music Downloader
+# Finx - Music Downloader
 
 A lightweight, CLI-based utility for downloading music. Built with simplicity and efficiency in mind.
 
