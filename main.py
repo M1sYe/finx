@@ -74,7 +74,6 @@ class cli_client():
         print(r" ) _)  )( /    / )  ( ")
         print(r"(__)  (__)\_)__)(_/\_)")
         print("1. Найти трек")
-        print("2. Изменить директорию для сохранения")
            
         try:
             user_input_case = int(input("введите: "))
@@ -83,14 +82,6 @@ class cli_client():
             return
         
         match user_input_case:
-            case 2:
-                new_path = input("путь: ")
-                if new_path:
-                    os.makedirs(new_path, exist_ok=True)
-                    self.dir = new_path
-                    print(f"директория: {self.dir}")
-                else:
-                    print("неверный путь")
             case 1:
                 track_name = input("название трека: ")
                 search_and_download(track_name)
