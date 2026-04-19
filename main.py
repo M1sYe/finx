@@ -1,97 +1,18 @@
-from ytmusicapi import YTMusic
-import yt_dlp
-import os
-import sys
+from cache_manager import CacheManager
+from cli_interface import CLIInterface
 
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return base_path
-
-def search_and_download(query):
-    ytmusic = YTMusic()
-    dir_upper = os.path.dirname(os.path.abspath(sys.argv[0])) 
+def main():
+    cache = CacheManager()
+    cli = CLIInterface(cache)
     
-    print(f"\nищем: {query}")
-    results = ytmusic.search(query, filter='songs', limit=5)
-    
-    if not results:
-        print("ничего не найдено")
-        return
-    
-    print("\nнайденные треки:")
-    for i, track in enumerate(results, 1):
-        artists = ', '.join([a['name'] for a in track.get('artists', [])])
-        print(f"{i}. {track['title']} - {artists}")
-    
-    try:
-        choice = int(input("\nВыберите номер трека для скачивания: ")) - 1
-        if choice == -1: return
-        if 0 <= choice < len(results):
-            track = results[choice]
-            video_id = track['videoId']
-            url = f"https://music.youtube.com/watch?v={video_id}"
-            os.system('cls' if os.name == 'nt' else 'clear')
-            
-            print(f"\nскачивание: {track['title']}")
-            
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'outtmpl': dir_upper+'/%(title)s.%(ext)s',
-                'quiet': False,
-                'no_warnings': False,
-                'sleep_interval': 5,
-                'max_sleep_interval': 10,
-                'sleep_interval_requests': 1,
-                'retries': 10,
-                'fragment_retries': 10,
-                'ffmpeg_location': "ffmpeg.exe",
-            }
-            
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
-                os.system('cls' if os.name == 'nt' else 'clear')
-
-            print("готово")
-        else:
-            print("неверный номер трека")
-            
-    except Exception as e:
-        print(f"ошибка: {e}")
-
-class cli_client():
-    def __call__(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(r" ____  __  __ _  _  _")
-        print(r"(  __)(  )(  ( \( \/ )")
-        print(r" ) _)  )( /    / )  ( ")
-        print(r"(__)  (__)\_)__)(_/\_)")
-        print("1. Найти трек")
-           
+    while True:
         try:
-            user_input_case = int(input("введите: "))
-        except ValueError:
-            print("введите номер действия")
-            return
-        
-        match user_input_case:
-            case 1:
-                track_name = input("название трека: ")
-                search_and_download(track_name)
+            cli.run()
+        except KeyboardInterrupt:
+            print("\n\nработа завершена")
+            break
+        except Exception as e:
+            print(f"непредвиденная ошибка: {e}")
 
-cli = cli_client()
-while True:
-    try:
-        cli()
-    except KeyboardInterrupt:
-        print("\n\nработа завершена")
-        break
-    except Exception as e:
-        print(f"ошибка: {e}")
+if __name__ == "__main__":
+    main()
