@@ -8,6 +8,7 @@ A lightweight, CLI-based utility for downloading music. Built with simplicity an
 - Download audio in MP3 format (192kbps quality)
 - Simple and intuitive CLI interface
 - Fast downloads with Yt-dlp backend
+- Add album covers
 
 ## Requirements
 
