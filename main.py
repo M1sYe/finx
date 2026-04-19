@@ -3,8 +3,16 @@ import yt_dlp
 import os
 import sys
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return base_path
+
 def search_and_download(query):
     ytmusic = YTMusic()
+    dir_upper = os.path.dirname(os.path.abspath(sys.argv[0])) 
     
     print(f"\nищем: {query}")
     results = ytmusic.search(query, filter='songs', limit=5)
@@ -36,7 +44,7 @@ def search_and_download(query):
                     'preferredcodec': 'mp3',
                     'preferredquality': '192',
                 }],
-                'outtmpl': 'downloads/%(title)s.%(ext)s',
+                'outtmpl': dir_upper+'/%(title)s.%(ext)s',
                 'quiet': False,
                 'no_warnings': False,
                 'sleep_interval': 5,
@@ -44,7 +52,7 @@ def search_and_download(query):
                 'sleep_interval_requests': 1,
                 'retries': 10,
                 'fragment_retries': 10,
-                'ffmpeg_location': r'C:\Program Files\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe',
+                'ffmpeg_location': "ffmpeg.exe",
             }
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -59,9 +67,6 @@ def search_and_download(query):
         print(f"ошибка: {e}")
 
 class cli_client():
-    def __init__(self):
-        self.dir = None
-
     def __call__(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(r" ____  __  __ _  _  _")
@@ -70,10 +75,9 @@ class cli_client():
         print(r"(__)  (__)\_)__)(_/\_)")
         print("1. Найти трек")
         print("2. Изменить директорию для сохранения")
-        
-        
+           
         try:
-            user_input_case = int(input("ваш выбор: "))
+            user_input_case = int(input("введите: "))
         except ValueError:
             print("введите номер действия")
             return
@@ -90,7 +94,6 @@ class cli_client():
             case 1:
                 track_name = input("название трека: ")
                 search_and_download(track_name)
-os.makedirs('downloads', exist_ok=True)
 
 cli = cli_client()
 while True:
