@@ -1,5 +1,14 @@
 from constants import Constants
-from downloader import search_tracks, format_track_info, download_track, clear_screen
+import sys
+from downloader import (
+    search_tracks, 
+    format_track_info, 
+    download_track,
+    search_albums,
+    get_album_tracks,
+    download_album,
+    clear_screen
+)
 import os
 
 class CLIInterface:
@@ -16,10 +25,13 @@ class CLIInterface:
         except ValueError:
             print("введите номер действия")
             return
-        
+        if choice == 0:
+            sys.exit()
         if choice == 1:
             self._handle_search()
         elif choice == 2:
+            self._handle_album_search()
+        elif choice == 3:
             self._handle_directory_change()
     
     def _show_logo(self):
@@ -29,8 +41,10 @@ class CLIInterface:
         print(r"(__)  (__)\_)__)(_/\_)")
     
     def _show_menu(self):
+        print("0. Выход")
         print("1. Найти трек")
-        print("2. Папка для скачивания")
+        print("2. Найти альбом")
+        print("3. Папка для скачивания")
     
     def _handle_search(self):
         track_name = input("название трека: ")
@@ -38,9 +52,17 @@ class CLIInterface:
             print("название трека не может быть пустым")
             return
         
-        self._search_and_download(track_name)
+        self._search_and_download_track(track_name)
     
-    def _search_and_download(self, query):
+    def _handle_album_search(self):
+        album_name = input("название альбома: ")
+        if not album_name.strip():
+            print("название альбома не может быть пустым")
+            return
+        
+        self._search_and_download_album(album_name)
+    
+    def _search_and_download_track(self, query):
         download_dir = self.cache.get_download_dir()
         
         print(f"\nищем: {query}")
@@ -69,6 +91,50 @@ class CLIInterface:
                 print("готово")
             else:
                 print("неверный номер трека")
+                
+        except ValueError:
+            print("пожалуйста, введите число")
+        except Exception as e:
+            print(f"ошибка при скачивании: {e}")
+    
+    def _search_and_download_album(self, query):
+        download_dir = self.cache.get_download_dir()
+        
+        print(f"\nищем альбомы: {query}")
+        results = search_albums(query)
+        
+        if not results:
+            print("альбомы не найдены")
+            return
+        
+        print("\nнайденные альбомы:")
+        for i, album in enumerate(results, 1):
+            album_title = album.get('title', 'Unknown')
+            artists = album.get('artists', [])
+            artist_str = ', '.join([a['name'] for a in artists]) if artists else 'Unknown Artist'
+            print(f"{i}. {album_title} - {artist_str}")
+        
+        try:
+            choice = int(input("\nвыберите номер альбома для скачивания (0 для отмены): ")) - 1
+            
+            if choice == -1:
+                return
+            
+            if 0 <= choice < len(results):
+                album = results[choice]
+                album_id = album.get('browseId')
+                album_title = album.get('title', 'Unknown Album')
+                
+                clear_screen()
+                success = download_album(album_id, album_title, download_dir, embed_cover=True)
+                
+                clear_screen()
+                if success:
+                    print("альбом успешно скачан!")
+                else:
+                    print("ошибка при скачивании альбома")
+            else:
+                print("неверный номер альбома")
                 
         except ValueError:
             print("пожалуйста, введите число")
