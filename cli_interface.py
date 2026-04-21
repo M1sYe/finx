@@ -1,5 +1,6 @@
 from constants import Constants
 import sys
+from logger import log_execution
 from downloader import (
     search_tracks, 
     format_track_info, 
@@ -12,9 +13,11 @@ from downloader import (
 import os
 
 class CLIInterface:
+    @log_execution
     def __init__(self, cache_manager):
         self.cache = cache_manager
     
+    @log_execution
     def run(self):
         clear_screen()
         self._show_logo()
@@ -34,18 +37,21 @@ class CLIInterface:
         elif choice == 3:
             self._handle_directory_change()
     
+    @log_execution
     def _show_logo(self):
         print(r" ____  __  __ _  _  _")
         print(r"(  __)(  )(  ( \( \/ )")
         print(r" ) _)  )( /    / )  ( ")
         print(r"(__)  (__)\_)__)(_/\_)")
     
+    @log_execution
     def _show_menu(self):
         print("0. Выход")
         print("1. Найти трек")
         print("2. Найти альбом")
         print("3. Папка для скачивания")
     
+    @log_execution
     def _handle_search(self):
         track_name = input("название трека: ")
         if not track_name.strip():
@@ -54,6 +60,7 @@ class CLIInterface:
         
         self._search_and_download_track(track_name)
     
+    @log_execution
     def _handle_album_search(self):
         album_name = input("название альбома: ")
         if not album_name.strip():
@@ -62,6 +69,7 @@ class CLIInterface:
         
         self._search_and_download_album(album_name)
     
+    @log_execution
     def _search_and_download_track(self, query):
         download_dir = self.cache.get_download_dir()
         
@@ -97,6 +105,7 @@ class CLIInterface:
         except Exception as e:
             print(f"ошибка при скачивании: {e}")
     
+    @log_execution
     def _search_and_download_album(self, query):
         download_dir = self.cache.get_download_dir()
         
@@ -141,6 +150,7 @@ class CLIInterface:
         except Exception as e:
             print(f"ошибка при скачивании: {e}")
     
+    @log_execution
     def _handle_directory_change(self):
         current_dir = self.cache.get_download_dir()
         print(f"текущая папка: {current_dir}")

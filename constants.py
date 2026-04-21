@@ -18,3 +18,4 @@ class Constants:
     THUMBNAIL_SIZE = 512
     AUTO_CROP_THUMBNAIL = True
     CROP_THRESHOLD = 0.05
+    LOG_NAME = "logs.log"

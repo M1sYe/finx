@@ -1,5 +1,5 @@
 ytmusicapi>=1.0.0
-yt-dlp>=2023.0.0
+yt-dlp[default]>=2023.0.0
 pyinstaller>=5.0.0
 mutagen>=1.45.0
 Pillow>=9.0.0

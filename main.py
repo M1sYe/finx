@@ -1,6 +1,11 @@
 from cache_manager import CacheManager
 from cli_interface import CLIInterface
+from logger import log_execution, Logger
 
+Logger._initialize_logger()
+Logger.clear_logs()
+
+@log_execution
 def main():
     cache = CacheManager()
     cli = CLIInterface(cache)
